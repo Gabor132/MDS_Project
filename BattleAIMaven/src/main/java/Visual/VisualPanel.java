@@ -3,6 +3,7 @@ package Visual;
 import Console.ConsoleFrame;
 import Constants.PathConstants;
 import Engine.Bullet;
+import Engine.DragosTank;
 import Engine.Tank;
 import java.awt.Color;
 import java.awt.Dimension;
@@ -12,9 +13,11 @@ import java.awt.Image;
 import java.awt.RenderingHints;
 import java.io.File;
 import java.io.IOException;
+import java.util.ArrayList;
 import java.util.Collections;
 import java.util.LinkedList;
 import java.util.List;
+import java.util.Random;
 import javax.imageio.ImageIO;
 
 /**
@@ -27,12 +30,14 @@ public class VisualPanel extends javax.swing.JPanel {
     Animator animator;
     List<Tank> tanks = Collections.synchronizedList(new LinkedList<Tank>());
     final List<Bullet> bullets = Collections.synchronizedList(new LinkedList<Bullet>());
+    private final Semafoare semafoare = new Semafoare();
+    private static int nrTank = 0;
     
     /**
      * Creates new form VisualPanel
      */ 
     public static Image tankSprite, cannonSprite, bulletSprite;
-    
+    public static ArrayList<Thread> tankThreads = new ArrayList<>();
     public VisualPanel() {
         initComponents();
         
@@ -43,14 +48,27 @@ public class VisualPanel extends javax.swing.JPanel {
         } catch (IOException ex) {
             ConsoleFrame.sendMessage("VisualPanel", "Failed to get sprites");
         }
-
-        tanks.add(new Tank(300, 300, 2, 100, 0, 100,"Tank1", tankSprite, cannonSprite));
-        
+        DragosTank tank = new DragosTank();
+        setupTank(tank);
+        tankThreads.add(new Thread(tank));
+        tanks.add(tank);
         for(Tank aux:tanks){
             System.out.println(aux);
         }
         
-        animator = new Animator(this, tanks, bullets);
+        animator = new Animator(this, tanks, bullets, tankThreads, semafoare);
+    }
+    
+    /**
+     *
+     * @param tank
+     */
+    public final void setupTank(Tank tank){
+        tank.setX(new Random().nextInt(400)+100);
+        tank.setY(new Random().nextInt(400)+100);
+        semafoare.addReady();
+        tank.setSemafoare(semafoare, nrTank);
+        nrTank++;
     }
     
     @Override

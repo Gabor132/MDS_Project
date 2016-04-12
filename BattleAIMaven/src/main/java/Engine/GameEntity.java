@@ -11,7 +11,7 @@ import java.util.Random;
  */
 public abstract class GameEntity implements TransformInterface {
     
-    protected int id;
+    protected final int id;
     //use Area so we can transform using affinetransformer
     private Area area;
     //transformation applied to area
@@ -52,6 +52,7 @@ public abstract class GameEntity implements TransformInterface {
         damage = speed = 10;
         angle = 0;
         x = y = new Random().nextInt(600)+100;
+        this.id = -1;
     }
     
     /**
@@ -156,11 +157,6 @@ public abstract class GameEntity implements TransformInterface {
         angle = (angle+degrees)%360;
     }
     
-    @Override
-    public void resize(double sx, double sy) {
-        scaleX = sx;
-        scaleY = sy;
-    }
     /**
      *  Get the shape of the object for visual drawing.
      * @return  a Shape object representing the shape of the entity.

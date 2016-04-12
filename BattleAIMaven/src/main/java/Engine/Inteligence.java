@@ -6,6 +6,8 @@ package Engine;
  */
 public interface Inteligence {
 
+    public void mainMoves();
+    
     public void gotHitByBullet();
 
     public void hitArenaWall();

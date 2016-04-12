@@ -5,12 +5,12 @@ import Engine.Tank;
 
 public class InteligenceTemplate implements Inteligence{ 
 
-    public void run(){
+    @Override
+    public void mainMoves(){
         
         while(true){
             
         }
-        
     }
 
     @Override 

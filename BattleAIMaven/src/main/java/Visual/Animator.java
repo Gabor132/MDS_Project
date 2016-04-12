@@ -22,28 +22,41 @@ public class Animator extends Thread{
     private final int framerate = Constants.VisualConstants.FRAME_RATE;
     private final List<Tank> tanks;
     private final List<Bullet> bullets;
-    private final TankFiringThread firingThread;
+    private final List<Thread> tankThreads;
+    private final Semafoare semafoare;
     
-    public Animator(JPanel panel, List<Tank> tanks, List<Bullet> bullets){
+    public Animator(JPanel panel, List<Tank> tanks, List<Bullet> bullets, List<Thread> tankThreads, Semafoare semafoare){
         this.panel = panel;
         this.tanks = tanks;
         this.bullets = bullets;
-        firingThread = new TankFiringThread(tanks,bullets);
+        this.tankThreads = tankThreads;
         running = true;
+        this.semafoare = semafoare;
     }
     
     @Override
     public void run(){
-        firingThread.start();
+        for(Thread thread:tankThreads){
+            thread.start();
+        }
+        
+        Bullet auxBullet = null;
         
         while(running){
             
             //DO ENTITY UPDATES
-            for (Tank tankAux : tanks) {
-                tankAux.rotateCannon(-0.1);
-                tankAux.rotate(0.1);
-            }
+//            for (Tank tankAux : tanks) {
+//                tankAux.rotateCannon(-0.1);
+//                tankAux.rotate(0.1);
+//            }
+            //Entities ar updated automatically
             synchronized(bullets){
+                for (Tank tankAux : tanks) {
+                    if(tankAux.hasFired()){
+                        auxBullet = tankAux.getBullet();
+                        bullets.add(auxBullet);
+                    }
+                }
                 List<Bullet> bulletsToBeRemoved = Collections.synchronizedList(new LinkedList<Bullet>());
                 for(Bullet bulletAux: bullets){
                     if(bulletAux.getX() > Constants.VisualConstants.ENGINE_WIDTH || bulletAux.getX() < 0 ||
@@ -64,6 +77,12 @@ public class Animator extends Thread{
             
             try{
                 Thread.sleep(1000/framerate);
+                synchronized(semafoare){
+                    for(int i = 0;i<semafoare.getSize();i++){
+                        semafoare.setReady(i, true);
+                    }
+                    semafoare.notifyAll();
+                }
             }
             catch(InterruptedException iex){
                 ConsoleFrame.sendMessage("Animator", "Thread interrupted");
@@ -77,7 +96,10 @@ public class Animator extends Thread{
      */
     
     public void stopAnimation(){
-        firingThread.stopFiring();
         running = false;
+        tanks.clear();
+        tankThreads.clear();
+        semafoare.reset();
+        bullets.clear();
     }
 }

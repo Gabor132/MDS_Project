@@ -1,21 +1,24 @@
 package Engine;
 
 import Constants.VisualConstants;
+import Visual.Semafoare;
 import Visual.VisualPanel;
-import static Visual.VisualPanel.cannonSprite;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
 import java.awt.Image;
 import java.awt.Shape;
 import java.awt.geom.*;
-import java.math.*;
 
-public class Tank extends GameEntity implements MovementInterface, TransformInterface, Drawable {    
+public abstract class Tank extends GameEntity implements MovementInterface, TransformInterface, Drawable {    
     protected Image tankSprite;
     protected String playerName;
     protected double life;
     protected Cannon cannon;
-    private final int id;
+    private boolean fired = false;
+    
+    protected Semafoare semafoare;
+    protected int indexSemafor;
+    
     //the id of the tank will be the current number of instanced tank classes
     private static int staticId;
     /**
@@ -27,7 +30,6 @@ public class Tank extends GameEntity implements MovementInterface, TransformInte
     
     public Tank(double xPos, double yPos, double speed, double damage, double angle, double life, String playerName, Image tankSprite, Image cannonSprite) {
         super(staticId,xPos, yPos, speed, damage, angle);
-        this.id = staticId;
         staticId++;
         this.tankSprite = tankSprite;
         this.life = life;
@@ -38,14 +40,33 @@ public class Tank extends GameEntity implements MovementInterface, TransformInte
     }
 
     public Tank() {
-        super(staticId,0,0,10,10,10);
-        id = staticId;
+        super(staticId,0,0,1,10,10);
         staticId++;
         width = height = 100;
         life = 100;
+        this.tankSprite = VisualPanel.tankSprite;
         width = (int)VisualConstants.TANK_WIDTH;
         height = (int)VisualConstants.TANK_HEIGHT;
+        cannon = new Cannon(staticId, 0, 0, speed, damage, angle, VisualPanel.cannonSprite);
     }
+    
+    public void setSemafoare(Semafoare semafoare, int indexSemafor){
+        this.semafoare = semafoare;
+        this.indexSemafor = indexSemafor;
+    }
+    
+    @Override
+    public void setX(double X){
+        super.setX(X);
+        cannon.setX(X);
+    }
+    
+    @Override
+    public void setY(double Y){
+        super.setY(Y);
+        cannon.setY(Y);
+    }
+    
     /**
      *  Gets the id of the tan
      * @return a integer value representing the id of the tank.
@@ -73,6 +94,7 @@ public class Tank extends GameEntity implements MovementInterface, TransformInte
             life = lfe;
         }
     }
+    
     @Override
     public void rotate(double degrees){
         angle = (angle + degrees)%360;
@@ -86,10 +108,6 @@ public class Tank extends GameEntity implements MovementInterface, TransformInte
         cannon.rotate(degrees);
     }
     
-    @Override
-    public void resize(double sx, double sy){
-        
-    }
     @Override
     public void moveUp() {
         setY(getY()-1);
@@ -127,14 +145,26 @@ public class Tank extends GameEntity implements MovementInterface, TransformInte
         //then we restore the cannon to it's former angle
         cannon.setAngle(cangle);
     }
-
+    
+    public boolean hasFired(){
+        if(fired){
+            fired = false;
+            return true;
+        }
+        return false;
+    }
+    
     /**
      * Shoots a bullet.
      *
      * @return a Bullet object representing a bullet shoot by the tank.
      */
-    public Bullet fire() {
+    public Bullet getBullet(){
         return cannon.fire();
+    }
+    
+    protected void fire() {
+        fired = true;
     }
 
     @Override
