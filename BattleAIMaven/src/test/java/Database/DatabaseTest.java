@@ -10,7 +10,6 @@ import static org.junit.Assert.assertEquals;
  */
 public class DatabaseTest {
     private final String[] tables;
-    
     public DatabaseTest() {
         DatabaseHandler.getInstance();
         tables = new String[]{"PLAYER_DB, MATCHES_DB, ATTEND"};
