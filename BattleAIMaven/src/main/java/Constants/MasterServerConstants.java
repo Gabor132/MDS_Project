@@ -4,13 +4,13 @@ package Constants;
  *
  * @author Dragos-Alexandru
  */
-public interface MasterServerConstants {
+public abstract class MasterServerConstants {
 
-    final String MASTER_USERNAME = "BattleAIMS";
-    final String IP = getIP();
-    int PORT = 60010;
-    long PACKET_DELAY = 3000; // expressed in milliseconds
-    final boolean TCP_NO_DELAY = true;
+    public static final String MASTER_USERNAME = "BattleAIMS";
+    public static final String IP = getIP();
+    public static final int PORT = 60010;
+    public static final long PACKET_DELAY = 3000; // expressed in milliseconds
+    public static final boolean TCP_NO_DELAY = true;
     
     public static String getIP() {
         if (System.getenv().get("TRAVIS") != null || System.getProperty("TEST") != null) {

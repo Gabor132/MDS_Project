@@ -1,7 +1,9 @@
 package Main;
 
-import Constants.MainConstants;
 import Console.ConsoleFrame;
+import static Constants.MainConstants.CLIENT_CONSOLE;
+import static Constants.MainConstants.MASTER_SERVER_CONSOLE;
+import static Constants.MainConstants.MASTER_SERVER_NO_CONSOLE;
 import Interface.MainFrame;
 import Networking.Server.ServerDispatcher;
 import java.awt.EventQueue;
@@ -10,7 +12,7 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 
-public class Main implements MainConstants {
+public class Main{
 
     public static ConsoleFrame console;
     private static Boolean consoleReady = false;

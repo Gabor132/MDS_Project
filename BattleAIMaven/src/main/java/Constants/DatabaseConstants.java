@@ -4,8 +4,8 @@ package Constants;
  *
  * @author Dragos-Alexandru
  */
-public interface DatabaseConstants {
+public abstract class DatabaseConstants {
 
-    String USERNAME = "";
-    String PASSWORD = "";
+    public final static String USERNAME = "";
+    public final static String PASSWORD = "";
 }

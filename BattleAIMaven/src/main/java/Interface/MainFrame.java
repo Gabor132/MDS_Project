@@ -1,6 +1,7 @@
 package Interface;
 
-import Constants.FrameConstants;
+import static Constants.FrameConstants.FRAME_HEIGHT;
+import static Constants.FrameConstants.FRAME_WIDTH;
 import Networking.Server.Player;
 import Visual.VisualEngine;
 import java.awt.event.WindowAdapter;
@@ -12,7 +13,7 @@ import javax.swing.JPanel;
  *
  * @author Dragos-Alexandru
  */
-public class MainFrame extends JFrame implements FrameConstants {
+public class MainFrame extends JFrame{
 
     private static MainFrame instance;
     public String localServerName = null;

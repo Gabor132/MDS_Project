@@ -4,9 +4,9 @@ package Constants;
  *
  * @author Dragos-Alexandru
  */
-public interface MainConstants {
+public abstract class MainConstants {
 
-    String CLIENT_CONSOLE = "-c";
-    String MASTER_SERVER_CONSOLE = "-sc";
-    String MASTER_SERVER_NO_CONSOLE = "-s";
+    public static final String CLIENT_CONSOLE = "-c";
+    public static final String MASTER_SERVER_CONSOLE = "-sc";
+    public static final String MASTER_SERVER_NO_CONSOLE = "-s";
 }
