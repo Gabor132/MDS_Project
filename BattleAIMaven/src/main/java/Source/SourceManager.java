@@ -7,13 +7,11 @@ import java.io.BufferedWriter;
 import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileOutputStream;
-import java.io.FilePermission;
 import java.io.FileReader;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
-import java.security.AccessController;
 import java.util.ArrayList;
 import java.util.List;
 import javax.swing.JOptionPane;
@@ -55,12 +53,6 @@ public final class SourceManager {
             } else {
                 ConsoleFrame.sendMessage(this.getClass().getSimpleName(), "Source index file exists");
                 sources = readSourceFileIndex(sourceIndex);
-            }
-        }
-        if (!sources.isEmpty()) {
-            ConsoleFrame.sendMessage(this.getClass().getSimpleName(), "Found this sources: ");
-            for (Source sourceAux : sources) {
-                ConsoleFrame.sendMessage(this.getClass().getSimpleName(), sourceAux.toString());
             }
         }
         readIntelligenceTemplate();

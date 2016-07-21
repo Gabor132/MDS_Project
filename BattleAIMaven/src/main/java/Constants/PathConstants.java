@@ -1,6 +1,5 @@
 package Constants;
 
-import Console.ConsoleFrame;
 import java.util.Map;
 
 /**
@@ -21,11 +20,25 @@ public abstract class PathConstants {
     public static final String BULLET_SPRITE_PATH = RESOURCE_FOLDER_PATH + "bullet.png";
     
     private static String getResourceFolderPath(){
-        String path = "target/classes/";
-        Map<String,String> map = System.getenv();
-        if(map.get("NB_EXEC_MAVEN_PROCESS_UUID") == null){
-            path = "classes/";
+        
+        String path = PathConstants.class.getResource("PathConstants.class").getPath();
+        if(path.contains("classes")){
+            path = path.replaceFirst("classes/Constants/PathConstants.class", "classes/");
+        }else{
+            path = path.replaceFirst("Constants/PathConstants.class", "");
         }
+        path = path.replaceFirst("file:/", "");
+        path = path.replaceFirst("!", "");
+        Map<String,String> map = System.getenv();
+        
+        System.out.println(map);
+        
+//        if(map.get("NB_EXEC_MAVEN_PROCESS_UUID") == null){
+//            path = "classes/";
+//        }else{
+//            System.out.println(map.get("NB_EXEC_MAVEN_PROCESS_UUID"));
+//        }
+        System.out.println("Default resource path: "+path);
         return path;
     }
 }
